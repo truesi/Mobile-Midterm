@@ -14,11 +14,11 @@ class OverviewViewModel : ViewModel() {
 
     private val _response = MutableLiveData<String>()
     private val _status = MutableLiveData<String>()
-    private val _properties = MutableLiveData<ArtistPropery>()
-    private val _image = MutableLiveData<Artists>()
+    private val _properties = MutableLiveData<List<ArtistPropery>>()
+    private val _images = MutableLiveData<Image>()
 
-    val image: LiveData<Artists>
-        get() = _image
+    val images: LiveData<Image>
+        get() = _images
 
     val response: LiveData<String>
         get() = _response
@@ -26,7 +26,7 @@ class OverviewViewModel : ViewModel() {
     val status: LiveData<String>
         get() = _status
 
-    val property: LiveData<ArtistPropery>
+    val property: LiveData<List<ArtistPropery>>
         get() = _properties
 
 
@@ -35,48 +35,40 @@ class OverviewViewModel : ViewModel() {
 
 
     init {
-        getMarsRealEstateProperties()
+        getArtistProperties()
     }
 
 
-    private fun getMarsRealEstateProperties() {
-
-//        MarsApi.retrofitService.getProperties().enqueue(object : Callback<ArtistPropery>{
-//            override fun onFailure(call: Call<ArtistPropery>, t: Throwable) {
-//                _response.value = "Failure " + t.message
-//            }
-//
-//            override fun onResponse(call: Call<ArtistPropery>, response: Response<ArtistPropery>) {
-//                _response.value = "Succes ${response.body()?.artists?.artist?.get(0)?.name}"
-//            }
-//        })
-
+    private fun getArtistProperties() {
 
         coroutineScope.launch {
-            var getPropertiesDeferred = MarsApi.retrofitService.getProperties()
+            var getPropertiesDeferred = ArtistApi.retrofitService.getProperties()
+           // var getImageDeferred = ArtistApi.retrofitService.getImage()
+
             try {
                 var listResult = getPropertiesDeferred.await()
-                _response.value = "Success: ${listResult.artists.artist.get(0).image[0].image}"
 
+               // var imageResult = getImageDeferred.await()
 
-//                if (listResult.artists.artist.size > 0){
-//                    _properties.value = listResult
+//                if(imageResult.size > 0){
+//                    _images.value = imageResult[0]
 //                }
 
 
+//                if(listResult.size > 0){
+//                    _properties.value = listResult
+//                }
+                if (listResult.size > 0){
+                    _status.value = listResult[0].artists.artist[0].image[0].image
+                }
 
-//                _status.value = MarsApiStatus.LOADING
-//                // Await the completion of our Retrofit request
-//                val listResult = getPropertiesDeferred.await()
-//                _status.value = MarsApiStatus.DONE
-//                _properties.value = listResult
+
             }catch (e: Exception) {
                 _status.value = "Failure: ${e.message}"
-
-//                _status.value = MarsApiStatus.ERROR
-//                _properties.value = ArrayList()
             }
         }
+
+
     }
 
     override fun onCleared() {
@@ -84,3 +76,4 @@ class OverviewViewModel : ViewModel() {
         viewModelJob.cancel()
     }
 }
+// _response.value = listResult.artists.artist.get(0).image[0].image

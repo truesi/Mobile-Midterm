@@ -17,9 +17,8 @@
 
 package com.example.android.swagger.network
 
-data class MarsProperty(
+data class Property(
         val name: String,
-
 
         val url: String
 

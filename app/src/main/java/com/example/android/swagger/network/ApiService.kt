@@ -21,16 +21,20 @@ private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .build()
 
-interface MarsApiService {
+interface ApiService {
 
     @GET("?method=chart.gettopartists&api_key=f05eaac1fc44a8881ff049cdd6ac0df5&format=json")
     fun getProperties():
-    // Deferred<List<MarsProperty>>
-            Deferred<ArtistPropery>
+    // Deferred<List<Property>>
+            Deferred<List<ArtistPropery>>
+
+    @GET("?method=chart.gettopartists&api_key=f05eaac1fc44a8881ff049cdd6ac0df5&format=json")
+    fun getImage():
+            Deferred<List<Image>>
 }
 
-object MarsApi {
-    val retrofitService : MarsApiService by lazy { retrofit.create(MarsApiService::class.java) }
+object ArtistApi {
+    val retrofitService : ApiService by lazy { retrofit.create(ApiService::class.java) }
 }
 //GET("?method=chart.gettopartists&api_key=f05eaac1fc44a8881ff049cdd6ac0df5&format=json")
 //@GET("?method=artist.getinfo&artist=Cher&api_key=f05eaac1fc44a8881ff049cdd6ac0df5&format=json")

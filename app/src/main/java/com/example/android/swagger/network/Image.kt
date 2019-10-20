@@ -5,5 +5,6 @@ import com.squareup.moshi.Json
 data class Image(
 
         @Json(name = "#text") val image: String,
-        val size: String
+        @Json(name = "size") val sizePic: String
+
 )
